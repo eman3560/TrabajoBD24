@@ -1,0 +1,32 @@
+CREATE DATABASE Patentamientos0724;
+
+Use Patentamientos0724;
+
+CREATE TABLE Base(
+base_cod MEDIUMINT PRIMARY KEY AUTO_INCREMENT,
+tramite_tipo	VARCHAR(62),
+tramite_fecha	VARCHAR(62),
+fecha_inscripcion_inicial	VARCHAR(62),
+registro_seccional_codigo	VARCHAR(62),
+registro_seccional_descripcion	VARCHAR(62),
+registro_seccional_provincia	VARCHAR(62),
+automotor_origen	VARCHAR(62),
+automotor_anio_modelo	VARCHAR(62),
+automotor_tipo_codigo	VARCHAR(62),
+automotor_tipo_descripcion	VARCHAR(62),
+automotor_marca_codigo	VARCHAR(62),
+automotor_marca_descripcion	VARCHAR(62),
+automotor_modelo_codigo	VARCHAR(62),
+automotor_modelo_descripcion	VARCHAR(62),
+automotor_uso_codigo	VARCHAR(62),
+automotor_uso_descripcion	VARCHAR(62),
+titular_tipo_persona	VARCHAR(62),
+titular_domicilio_localidad	VARCHAR(62),
+titular_domicilio_provincia	VARCHAR(62),
+titular_genero	VARCHAR(62),
+titular_anio_nacimiento	VARCHAR(62),
+titular_pais_nacimiento	VARCHAR(62),
+titular_porcentaje_titularidad	VARCHAR(62),
+titular_domicilio_provincia_id	VARCHAR(62),
+titular_pais_nacimiento_id	VARCHAR(62)
+)
