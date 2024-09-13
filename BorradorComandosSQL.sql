@@ -1,5 +1,5 @@
 CREATE DATABASE pat24;
-use pat24;
+USE pat24;
 
 CREATE TABLE base(
     base_cod MEDIUMINT PRIMARY KEY AUTO_INCREMENT,
@@ -43,11 +43,227 @@ automotor_uso_descripcion, titular_tipo_persona, titular_domicilio_localidad, ti
 titular_anio_nacimiento, titular_pais_nacimiento, titular_porcentaje_titularidad, titular_domicilio_provincia_id,
 titular_pais_nacimiento_id);
 
+###
 
-UPDATE base
-SET automotor_modelo_codigo=NULL
-WHERE automotor_modelo_codigo=""
+UPDATE base 
+SET 
+    tramite_tipo = NULL
+WHERE
+    tramite_tipo = ''
+        AND base_cod IS NOT NULL;
 
-UPDATE base
-SET base.automotor_origen = NULL
-WHERE base.automotor_origen = "" ;
+###
+
+UPDATE base 
+SET 
+    tramite_fecha = NULL
+WHERE
+    tramite_fecha = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    fecha_inscripcion_inicial = NULL
+WHERE
+    fecha_inscripcion_inicial = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    registro_seccional_codigo = NULL
+WHERE
+    registro_seccional_codigo = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    registro_seccional_descripcion = NULL
+WHERE
+    registro_seccional_descripcion = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    registro_seccional_provincia = NULL
+WHERE
+    registro_seccional_provincia = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    automotor_origen = NULL
+WHERE
+    automotor_origen = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    automotor_anio_modelo = NULL
+WHERE
+    automotor_anio_modelo = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    automotor_tipo_codigo = NULL
+WHERE
+    automotor_tipo_codigo = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    automotor_tipo_descripcion = NULL
+WHERE
+    automotor_tipo_descripcion = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    automotor_marca_codigo = NULL
+WHERE
+    automotor_marca_codigo = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    automotor_marca_descripcion = NULL
+WHERE
+    automotor_marca_descripcion = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    automotor_modelo_codigo = NULL
+WHERE
+    automotor_modelo_codigo = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    automotor_modelo_descripcion = NULL
+WHERE
+    automotor_modelo_descripcion = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    automotor_uso_codigo = NULL
+WHERE
+    automotor_uso_codigo = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    automotor_uso_descripcion = NULL
+WHERE
+    automotor_uso_descripcion = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    titular_tipo_persona = NULL
+WHERE
+    titular_tipo_persona = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    titular_domicilio_localidad = NULL
+WHERE
+    titular_domicilio_localidad = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    titular_domicilio_provincia = NULL
+WHERE
+    titular_domicilio_provincia = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    titular_genero = NULL
+WHERE
+    titular_genero = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    titular_anio_nacimiento = NULL
+WHERE
+    titular_anio_nacimiento = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    titular_pais_nacimiento = NULL
+WHERE
+    titular_pais_nacimiento = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    titular_porcentaje_titularidad = NULL
+WHERE
+    titular_porcentaje_titularidad = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    titular_domicilio_provincia_id = NULL
+WHERE
+    titular_domicilio_provincia_id = ''
+        AND base_cod IS NOT NULL;
+
+###
+
+UPDATE base 
+SET 
+    titular_pais_nacimiento_id = NULL
+WHERE
+    titular_pais_nacimiento_id = ''
+        AND base_cod IS NOT NULL;
