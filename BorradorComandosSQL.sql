@@ -30,11 +30,11 @@ CREATE TABLE base(
     titular_pais_nacimiento_id	VARCHAR(255) DEFAULT NULL
 )
 
-LOAD DATA INFILE 'Y:\\Trabajo Base de Datos\\TrabajoBD24\\dnrpa.csv' 
-INTO TABLE Base
+LOAD DATA INFILE 'C:\\BasePatentes\\TrabajoBD24\\dnrpa.csv' 
+INTO TABLE base
 FIELDS TERMINATED BY ',' 
 ENCLOSED BY '"' 
-LINES TERMINATED BY '\n' 
+LINES TERMINATED BY '\r\n' 
 IGNORE 1 ROWS
 (tramite_tipo, tramite_fecha, fecha_inscripcion_inicial, registro_seccional_codigo, registro_seccional_descripcion,
 registro_seccional_provincia, automotor_origen, automotor_anio_modelo, automotor_tipo_codigo, automotor_tipo_descripcion,
@@ -267,3 +267,27 @@ SET
 WHERE
     titular_pais_nacimiento_id = ''
         AND base_cod IS NOT NULL;
+
+CREATE TABLE provincia(
+prov_cod TINYINT PRIMARY KEY AUTO_INCREMENT,
+prov_nom VARCHAR(50) NOT null);
+
+INSERT INTO provincia(prov_nom) 
+SELECT DISTINCT registro_seccional_provincia
+FROM base;
+
+CREATE TABLE origen_auto(
+cod_ori TINYINT PRIMARY KEY AUTO_INCREMENT,
+cod_descrip VARCHAR(15) NOT NULL);
+
+CREATE TABLE tipo_automotor(
+cod_tipo TINYINT PRIMARY KEY AUTO_INCREMENT,
+cod_automotor VARCHAR(50) NOT NULL);
+
+CREATE TABLE modelo_automotor(
+cod_modelo TINYINT PRIMARY KEY AUTO_INCREMENT,
+descrip_modelo VARCHAR(50) NOT NULL);
+
+CREATE TABLE genero(
+cod_genero TINYINT PRIMARY KEY AUTO_INCREMENT,
+descrip_genero VARCHAR(50) NOT NULL);
