@@ -276,18 +276,26 @@ INSERT INTO provincia(prov_nom)
 SELECT DISTINCT registro_seccional_provincia
 FROM base;
 
-CREATE TABLE origen_auto(
-cod_ori TINYINT PRIMARY KEY AUTO_INCREMENT,
-cod_descrip VARCHAR(15) NOT NULL);
+CREATE TABLE automotor_origen(
+cod_auto_ori TINYINT PRIMARY KEY AUTO_INCREMENT,
+ori_descrip VARCHAR(15) NOT NULL);
 
-CREATE TABLE tipo_automotor(
-cod_tipo TINYINT PRIMARY KEY AUTO_INCREMENT,
-cod_automotor VARCHAR(50) NOT NULL);
+CREATE TABLE automotor_tipo_descrip(
+cod_tipo_desc TINYINT PRIMARY KEY AUTO_INCREMENT,
+tipo_desc VARCHAR(50) NOT NULL);
 
-CREATE TABLE modelo_automotor(
-cod_modelo TINYINT PRIMARY KEY AUTO_INCREMENT,
-descrip_modelo VARCHAR(50) NOT NULL);
+CREATE TABLE automotor_marca_descrip(
+cod_marca_desc TINYINT PRIMARY KEY AUTO_INCREMENT,
+marca_desc VARCHAR(50) NOT NULL);
+
+CREATE TABLE automotor_modelo_descrip(
+cod_modelo_desc TINYINT PRIMARY KEY AUTO_INCREMENT,
+modelo_desc VARCHAR(50) NOT NULL);
+
+CREATE TABLE titular_domidicilio_prov(
+cod_domicilio_prov TINYINT PRIMARY KEY AUTO_INCREMENT,
+titu_domicilio_prov VARCHAR(50) NOT NULL);
 
 CREATE TABLE genero(
-cod_genero TINYINT PRIMARY KEY AUTO_INCREMENT,
-descrip_genero VARCHAR(50) NOT NULL);
+cod_titular_gen TINYINT PRIMARY KEY AUTO_INCREMENT,
+titular_gen VARCHAR(50) NOT NULL);
