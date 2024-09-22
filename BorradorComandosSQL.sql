@@ -267,6 +267,7 @@ SET
 WHERE
     titular_pais_nacimiento_id = ''
         AND base_cod IS NOT NULL;
+-------------------------------------------
 
 CREATE TABLE provincia(
 prov_cod TINYINT PRIMARY KEY AUTO_INCREMENT,
@@ -276,26 +277,34 @@ INSERT INTO provincia(prov_nom)
 SELECT DISTINCT registro_seccional_provincia
 FROM base;
 
-CREATE TABLE automotor_origen(
-cod_auto_ori TINYINT PRIMARY KEY AUTO_INCREMENT,
-ori_descrip VARCHAR(15) NOT NULL);
-
 CREATE TABLE automotor_tipo_descrip(
 cod_tipo_desc TINYINT PRIMARY KEY AUTO_INCREMENT,
+tipo_cod VARCHAR(2),
 tipo_desc VARCHAR(50) NOT NULL);
 
+INSERT INTO automotor_tipo_descrip(tipo_cod,tipo_desc)
+SELECT distinct base.automotor_tipo_codigo,base.automotor_tipo_descripcion
+FROM base;
+
 CREATE TABLE automotor_marca_descrip(
-cod_marca_desc TINYINT PRIMARY KEY AUTO_INCREMENT,
+cod_marca_desc smallint PRIMARY KEY AUTO_INCREMENT,
+marca_cod varchar(4),
 marca_desc VARCHAR(50) NOT NULL);
+
+insert into automotor_marca_descrip(marca_cod, marca_desc)
+SELECT DISTINCT base.automotor_marca_codigo,base.automotor_marca_descripcion
+FROM base;
 
 CREATE TABLE automotor_modelo_descrip(
 cod_modelo_desc TINYINT PRIMARY KEY AUTO_INCREMENT,
 modelo_desc VARCHAR(50) NOT NULL);
 
-CREATE TABLE titular_domidicilio_prov(
-cod_domicilio_prov TINYINT PRIMARY KEY AUTO_INCREMENT,
-titu_domicilio_prov VARCHAR(50) NOT NULL);
-
 CREATE TABLE genero(
 cod_titular_gen TINYINT PRIMARY KEY AUTO_INCREMENT,
 titular_gen VARCHAR(50) NOT NULL);
+
+--------------------------------------
+--carga valores unicos de relacion ID-Descripcion
+INSERT INTO automotor_tipo_descrip (tipo_codigo,tipo_desc)
+SELECT DISTINCT base.automotor_tipo_codigo, base.automotor_tipo_descripcion
+FROM base WHERE base.automotor_tipo_descripcion IS NOT NULL;
