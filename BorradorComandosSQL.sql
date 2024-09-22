@@ -329,3 +329,21 @@ FOREIGN KEY (titular_genero)
 REFERENCES genero(cod_titular_gen)
 ON DELETE RESTRICT
 ON UPDATE RESTRICT;
+
+
+UPDATE base
+JOIN automotor_tipo_descrip
+ON base.automotor_tipo_codigo=automotor_tipo_descrip.tipo_cod 
+AND base.automotor_tipo_descripcion=automotor_tipo_descrip.tipo_desc
+SET base.automotor_tipo_codigo = automotor_tipo_descrip.cod_tipo_desc
+
+ALTER TABLE base MODIFY base.automotor_tipo_codigo tinyint;
+
+ALTER TABLE base DROP COLUMN base.automotor_tipo_descripcion;
+
+ALTER TABLE base
+ADD CONSTRAINT fk_tipo
+FOREIGN KEY (automotor_tipo_codigo)
+REFERENCES automotor_tipo_descrip(cod_tipo_desc)
+ON DELETE RESTRICT
+ON UPDATE RESTRICT;
