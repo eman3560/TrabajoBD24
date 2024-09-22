@@ -3,31 +3,31 @@ USE pat24;
 
 CREATE TABLE base(
     base_cod MEDIUMINT PRIMARY KEY AUTO_INCREMENT,
-    tramite_tipo	VARCHAR(255) DEFAULT NULL,
-    tramite_fecha	VARCHAR(255) DEFAULT NULL,
-    fecha_inscripcion_inicial	VARCHAR(255) DEFAULT NULL,
-    registro_seccional_codigo	VARCHAR(255) DEFAULT NULL,
-    registro_seccional_descripcion	VARCHAR(255) DEFAULT NULL,
-    registro_seccional_provincia	VARCHAR(255) DEFAULT NULL,
-    automotor_origen	VARCHAR(255) DEFAULT NULL,
-    automotor_anio_modelo	VARCHAR(255) DEFAULT NULL,
-    automotor_tipo_codigo	VARCHAR(255) DEFAULT NULL,
-    automotor_tipo_descripcion	VARCHAR(255) DEFAULT NULL,
-    automotor_marca_codigo	VARCHAR(255) DEFAULT NULL,
-    automotor_marca_descripcion	VARCHAR(255) DEFAULT NULL,
-    automotor_modelo_codigo	VARCHAR(255) DEFAULT NULL,
-    automotor_modelo_descripcion	VARCHAR(255) DEFAULT NULL,
-    automotor_uso_codigo	VARCHAR(255) DEFAULT NULL,
-    automotor_uso_descripcion	VARCHAR(255) DEFAULT NULL,
-    titular_tipo_persona	VARCHAR(255) DEFAULT NULL,
-    titular_domicilio_localidad	VARCHAR(255) DEFAULT NULL,
-    titular_domicilio_provincia	VARCHAR(255) DEFAULT NULL,
-    titular_genero	VARCHAR(255) DEFAULT NULL,
-    titular_anio_nacimiento	VARCHAR(255) DEFAULT NULL,
-    titular_pais_nacimiento	VARCHAR(255) DEFAULT NULL,
-    titular_porcentaje_titularidad	VARCHAR(255) DEFAULT NULL,
-    titular_domicilio_provincia_id	VARCHAR(255) DEFAULT NULL,
-    titular_pais_nacimiento_id	VARCHAR(255) DEFAULT NULL
+    tramite_tipo	VARCHAR(255) ,
+    tramite_fecha	VARCHAR(255) ,
+    fecha_inscripcion_inicial	VARCHAR(255) ,
+    registro_seccional_codigo	VARCHAR(255) ,
+    registro_seccional_descripcion	VARCHAR(255) ,
+    registro_seccional_provincia	VARCHAR(255) ,
+    automotor_origen	VARCHAR(255) ,
+    automotor_anio_modelo	VARCHAR(255) ,
+    automotor_tipo_codigo	VARCHAR(255) ,
+    automotor_tipo_descripcion	VARCHAR(255) ,
+    automotor_marca_codigo	VARCHAR(255) ,
+    automotor_marca_descripcion	VARCHAR(255) ,
+    automotor_modelo_codigo	VARCHAR(255) ,
+    automotor_modelo_descripcion	VARCHAR(255) ,
+    automotor_uso_codigo	VARCHAR(255) ,
+    automotor_uso_descripcion	VARCHAR(255) ,
+    titular_tipo_persona	VARCHAR(255) ,
+    titular_domicilio_localidad	VARCHAR(255) ,
+    titular_domicilio_provincia	VARCHAR(255) ,
+    titular_genero	VARCHAR(255) ,
+    titular_anio_nacimiento	VARCHAR(255) ,
+    titular_pais_nacimiento	VARCHAR(255) ,
+    titular_porcentaje_titularidad	VARCHAR(255) ,
+    titular_domicilio_provincia_id	VARCHAR(255) ,
+    titular_pais_nacimiento_id	VARCHAR(255) 
 )
 
 LOAD DATA INFILE 'C:\\BasePatentes\\TrabajoBD24\\dnrpa.csv' 
@@ -430,4 +430,22 @@ FOREIGN KEY (titular_domicilio_provincia)
 REFERENCES provincia(prov_cod)
 ON DELETE RESTRICT
 ON UPDATE RESTRICT;
+-----------------------
+--editando el resto de los campos para disminur tamaño BD. Inicial 14,1
 
+ALTER TABLE base MODIFY base.tramite_tipo VARCHAR(60)
+ALTER TABLE base MODIFY tramite_fecha date
+ALTER TABLE base MODIFY base.fecha_inscripcion_inicial date
+ALTER TABLE base MODIFY registro_seccional_codigo varchar(5)
+ALTER TABLE base MODIFY registro_seccional_descripcion varchar(50)
+ALTER TABLE base MODIFY automotor_origen varchar(12)
+ALTER TABLE base MODIFY base.automotor_anio_modelo VARCHAR(5)
+ALTER TABLE base MODIFY base.automotor_uso_codigo VARCHAR(1)
+ALTER TABLE base MODIFY base.automotor_uso_descripcion varchar(7)  
+ALTER TABLE base MODIFY base.titular_tipo_persona varchar(9)
+ALTER TABLE base MODIFY base.titular_domicilio_localidad varchar(42)
+ALTER TABLE base MODIFY base.titular_anio_nacimiento varchar(5)
+ALTER TABLE base MODIFY base.titular_pais_nacimiento varchar(20)
+ALTER TABLE base MODIFY base.titular_porcentaje_titularidad varchar(3)
+ALTER TABLE base MODIFY base.titular_domicilio_provincia_id varchar(2)
+ALTER TABLE base MODIFY base.titular_pais_nacimiento_id varchar(4)
