@@ -30,11 +30,11 @@ CREATE TABLE base(
     titular_pais_nacimiento_id	VARCHAR(255) DEFAULT NULL
 )
 
-LOAD DATA INFILE 'Y:\\Trabajo Base de Datos\\TrabajoBD24\\dnrpa.csv' 
-INTO TABLE Base
+LOAD DATA INFILE 'C:\\BasePatentes\\TrabajoBD24\\dnrpa.csv' 
+INTO TABLE base
 FIELDS TERMINATED BY ',' 
 ENCLOSED BY '"' 
-LINES TERMINATED BY '\n' 
+LINES TERMINATED BY '\r\n' 
 IGNORE 1 ROWS
 (tramite_tipo, tramite_fecha, fecha_inscripcion_inicial, registro_seccional_codigo, registro_seccional_descripcion,
 registro_seccional_provincia, automotor_origen, automotor_anio_modelo, automotor_tipo_codigo, automotor_tipo_descripcion,
@@ -44,7 +44,7 @@ titular_anio_nacimiento, titular_pais_nacimiento, titular_porcentaje_titularidad
 titular_pais_nacimiento_id);
 
 ###
-
+-- 1 -- normalizacion de datos
 UPDATE base 
 SET 
     tramite_tipo = NULL
@@ -267,3 +267,167 @@ SET
 WHERE
     titular_pais_nacimiento_id = ''
         AND base_cod IS NOT NULL;
+--2 crear tablas relacionadas y cargar datos -----------------------------------------
+
+CREATE TABLE provincia(
+prov_cod TINYINT PRIMARY KEY AUTO_INCREMENT,
+prov_nom VARCHAR(50) NOT null);
+
+INSERT INTO provincia(prov_nom) 
+SELECT DISTINCT registro_seccional_provincia
+FROM base;
+
+CREATE TABLE automotor_tipo_descrip(
+cod_tipo_desc TINYINT PRIMARY KEY AUTO_INCREMENT,
+tipo_cod VARCHAR(2),
+tipo_desc VARCHAR(50) NOT NULL);
+
+INSERT INTO automotor_tipo_descrip(tipo_cod,tipo_desc)
+SELECT distinct base.automotor_tipo_codigo,base.automotor_tipo_descripcion
+FROM base;
+
+CREATE TABLE automotor_marca_descrip(
+cod_marca_desc smallint PRIMARY KEY AUTO_INCREMENT,
+marca_cod varchar(4),
+marca_desc VARCHAR(50) NOT NULL);
+
+insert into automotor_marca_descrip(marca_cod, marca_desc)
+SELECT DISTINCT base.automotor_marca_codigo,base.automotor_marca_descripcion
+FROM base;
+
+CREATE TABLE automotor_modelo_descrip(
+cod_modelo_desc SMALLINT PRIMARY KEY AUTO_INCREMENT,
+modelo_cod varchar(4),
+modelo_desc VARCHAR(50) NOT NULL);
+
+INSERT into automotor_modelo_descrip(modelo_cod,modelo_desc)
+SELECT DISTINCT base.automotor_modelo_codigo,base.automotor_modelo_descripcion
+FROM base;
+
+CREATE TABLE genero(
+cod_titular_gen TINYINT PRIMARY KEY AUTO_INCREMENT,
+titular_gen VARCHAR(50) NOT NULL);
+
+INSERT into genero(titular_gen)
+SELECT DISTINCT base.titular_genero
+FROM base;
+
+--3 generar referencias en la tabla principal a las tablas relacionadas------------------------------------
+
+---- remplazo a descripcion de los generos en la tabla base por la referencia a la tabla generos---
+UPDATE base
+JOIN genero
+ON base.titular_genero=genero.titular_gen
+SET base.titular_genero = genero.cod_titular_gen;
+--- el campo titular_genero se importo como varchar(255) pero ahora que solo tiene un numero no necesita ser tan grande. Lo hago tinyint porque
+-- ese tipo de dato es la clave primaria de la tabla y es necesario que sean iguales para hacer las reglas de integridad---
+ALTER TABLE base MODIFY titular_genero tinyint;
+--- agrego reglas de integridad referencial
+ALTER TABLE base
+ADD CONSTRAINT fk_genero
+FOREIGN KEY (titular_genero)
+REFERENCES genero(cod_titular_gen)
+ON DELETE RESTRICT
+ON UPDATE RESTRICT;
+
+------------------
+UPDATE base
+JOIN automotor_tipo_descrip
+ON base.automotor_tipo_codigo=automotor_tipo_descrip.tipo_cod 
+AND base.automotor_tipo_descripcion=automotor_tipo_descrip.tipo_desc
+SET base.automotor_tipo_codigo = automotor_tipo_descrip.cod_tipo_desc
+
+ALTER TABLE base MODIFY base.automotor_tipo_codigo tinyint;
+
+ALTER TABLE base DROP COLUMN base.automotor_tipo_descripcion;
+
+ALTER TABLE base
+ADD CONSTRAINT fk_tipo
+FOREIGN KEY (automotor_tipo_codigo)
+REFERENCES automotor_tipo_descrip(cod_tipo_desc)
+ON DELETE RESTRICT
+ON UPDATE RESTRICT;
+------------
+UPDATE base
+JOIN automotor_marca_descrip
+ON base.automotor_marca_codigo=automotor_marca_descrip.marca_cod
+AND base.automotor_marca_descripcion=automotor_marca_descrip.marca_desc
+SET base.automotor_marca_codigo=automotor_marca_descrip.cod_marca_desc
+
+ALTER TABLE base MODIFY base.automotor_marca_codigo smallint;
+
+ALTER TABLE base DROP COLUMN base.automotor_marca_descripcion;
+
+ALTER TABLE base
+ADD CONSTRAINT fk_marca
+FOREIGN KEY (automotor_marca_codigo)
+REFERENCES automotor_marca_descrip(cod_marca_desc)
+ON DELETE RESTRICT
+ON UPDATE RESTRICT;
+------------
+UPDATE base
+JOIN automotor_modelo_descrip
+ON base.automotor_modelo_codigo=automotor_modelo_descrip.modelo_cod
+AND base.automotor_modelo_descripcion=automotor_modelo_descrip.modelo_desc
+SET base.automotor_modelo_codigo=automotor_modelo_descrip.cod_modelo_desc
+
+ALTER TABLE base MODIFY base.automotor_modelo_codigo smallint;
+
+ALTER TABLE base DROP COLUMN base.automotor_modelo_descripcion;
+
+ALTER TABLE base
+ADD CONSTRAINT fk_modelo
+FOREIGN KEY (automotor_modelo_codigo)
+REFERENCES automotor_modelo_descrip(cod_modelo_desc)
+ON DELETE RESTRICT
+ON UPDATE RESTRICT;
+------------- PROVINCIA DEL REGISTRO DONDE SE INSCRIBIO EL AUTO
+UPDATE base
+JOIN provincia
+ON base.registro_seccional_provincia=provincia.prov_nom
+SET base.registro_seccional_provincia=provincia.prov_cod
+
+ALTER TABLE base MODIFY base.registro_seccional_provincia tinyint;
+
+ALTER TABLE base
+ADD CONSTRAINT fk_prov_secc
+FOREIGN KEY (registro_seccional_provincia)
+REFERENCES provincia(prov_cod)
+ON DELETE RESTRICT
+ON UPDATE RESTRICT;
+
+------------- PROVINCIA DEL COMPRADOR DEL AUTO
+UPDATE base
+JOIN provincia
+ON base.registro_seccional_provincia=provincia.prov_nom
+SET base.registro_seccional_provincia=provincia.prov_cod
+
+ALTER TABLE base MODIFY base.registro_seccional_provincia tinyint;
+
+ALTER TABLE base
+ADD CONSTRAINT fk_prov_secc
+FOREIGN KEY (registro_seccional_provincia)
+REFERENCES provincia(prov_cod)
+ON DELETE RESTRICT
+ON UPDATE RESTRICT;
+
+-- error: hay 3 provincias escritas en forma diferente CIUDADA AUTONOMA DE BUENOS AIRES, SANTIAGO DEL ESTERO Y TIERRA DEL FUEGO
+--se corrige poniendo el mismo codigo de provincia que la seccion
+UPDATE base
+JOIN provincia
+ON base.titular_domicilio_provincia=provincia.prov_nom
+SET base.titular_domicilio_provincia=provincia.prov_cod;
+
+ALTER TABLE base MODIFY base.titular_domicilio_provincia tinyint;
+
+UPDATE base 
+SET base.titular_domicilio_provincia=base.registro_seccional_provincia
+WHERE base.titular_domicilio_provincia=0;
+
+ALTER TABLE base
+ADD CONSTRAINT fk_prov_mod
+FOREIGN KEY (titular_domicilio_provincia)
+REFERENCES provincia(prov_cod)
+ON DELETE RESTRICT
+ON UPDATE RESTRICT;
+
