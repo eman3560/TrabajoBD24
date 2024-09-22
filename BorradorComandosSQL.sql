@@ -330,7 +330,7 @@ REFERENCES genero(cod_titular_gen)
 ON DELETE RESTRICT
 ON UPDATE RESTRICT;
 
-
+------------------
 UPDATE base
 JOIN automotor_tipo_descrip
 ON base.automotor_tipo_codigo=automotor_tipo_descrip.tipo_cod 
@@ -347,3 +347,87 @@ FOREIGN KEY (automotor_tipo_codigo)
 REFERENCES automotor_tipo_descrip(cod_tipo_desc)
 ON DELETE RESTRICT
 ON UPDATE RESTRICT;
+------------
+UPDATE base
+JOIN automotor_marca_descrip
+ON base.automotor_marca_codigo=automotor_marca_descrip.marca_cod
+AND base.automotor_marca_descripcion=automotor_marca_descrip.marca_desc
+SET base.automotor_marca_codigo=automotor_marca_descrip.cod_marca_desc
+
+ALTER TABLE base MODIFY base.automotor_marca_codigo smallint;
+
+ALTER TABLE base DROP COLUMN base.automotor_marca_descripcion;
+
+ALTER TABLE base
+ADD CONSTRAINT fk_marca
+FOREIGN KEY (automotor_marca_codigo)
+REFERENCES automotor_marca_descrip(cod_marca_desc)
+ON DELETE RESTRICT
+ON UPDATE RESTRICT;
+------------
+UPDATE base
+JOIN automotor_modelo_descrip
+ON base.automotor_modelo_codigo=automotor_modelo_descrip.modelo_cod
+AND base.automotor_modelo_descripcion=automotor_modelo_descrip.modelo_desc
+SET base.automotor_modelo_codigo=automotor_modelo_descrip.cod_modelo_desc
+
+ALTER TABLE base MODIFY base.automotor_modelo_codigo smallint;
+
+ALTER TABLE base DROP COLUMN base.automotor_modelo_descripcion;
+
+ALTER TABLE base
+ADD CONSTRAINT fk_modelo
+FOREIGN KEY (automotor_modelo_codigo)
+REFERENCES automotor_modelo_descrip(cod_modelo_desc)
+ON DELETE RESTRICT
+ON UPDATE RESTRICT;
+------------- PROVINCIA DEL REGISTRO DONDE SE INSCRIBIO EL AUTO
+UPDATE base
+JOIN provincia
+ON base.registro_seccional_provincia=provincia.prov_nom
+SET base.registro_seccional_provincia=provincia.prov_cod
+
+ALTER TABLE base MODIFY base.registro_seccional_provincia tinyint;
+
+ALTER TABLE base
+ADD CONSTRAINT fk_prov_secc
+FOREIGN KEY (registro_seccional_provincia)
+REFERENCES provincia(prov_cod)
+ON DELETE RESTRICT
+ON UPDATE RESTRICT;
+
+------------- PROVINCIA DEL COMPRADOR DEL AUTO
+UPDATE base
+JOIN provincia
+ON base.registro_seccional_provincia=provincia.prov_nom
+SET base.registro_seccional_provincia=provincia.prov_cod
+
+ALTER TABLE base MODIFY base.registro_seccional_provincia tinyint;
+
+ALTER TABLE base
+ADD CONSTRAINT fk_prov_secc
+FOREIGN KEY (registro_seccional_provincia)
+REFERENCES provincia(prov_cod)
+ON DELETE RESTRICT
+ON UPDATE RESTRICT;
+
+-- error: hay 3 provincias escritas en forma diferente CIUDADA AUTONOMA DE BUENOS AIRES, SANTIAGO DEL ESTERO Y TIERRA DEL FUEGO
+--se corrige poniendo el mismo codigo de provincia que la seccion
+UPDATE base
+JOIN provincia
+ON base.titular_domicilio_provincia=provincia.prov_nom
+SET base.titular_domicilio_provincia=provincia.prov_cod;
+
+ALTER TABLE base MODIFY base.titular_domicilio_provincia tinyint;
+
+UPDATE base 
+SET base.titular_domicilio_provincia=base.registro_seccional_provincia
+WHERE base.titular_domicilio_provincia=0;
+
+ALTER TABLE base
+ADD CONSTRAINT fk_prov_mod
+FOREIGN KEY (titular_domicilio_provincia)
+REFERENCES provincia(prov_cod)
+ON DELETE RESTRICT
+ON UPDATE RESTRICT;
+
