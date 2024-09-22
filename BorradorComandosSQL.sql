@@ -44,7 +44,7 @@ titular_anio_nacimiento, titular_pais_nacimiento, titular_porcentaje_titularidad
 titular_pais_nacimiento_id);
 
 ###
-
+-- 1 -- normalizacion de datos
 UPDATE base 
 SET 
     tramite_tipo = NULL
@@ -267,7 +267,7 @@ SET
 WHERE
     titular_pais_nacimiento_id = ''
         AND base_cod IS NOT NULL;
--------------------------------------------
+--2 crear tablas relacionadas y cargar datos -----------------------------------------
 
 CREATE TABLE provincia(
 prov_cod TINYINT PRIMARY KEY AUTO_INCREMENT,
@@ -296,15 +296,36 @@ SELECT DISTINCT base.automotor_marca_codigo,base.automotor_marca_descripcion
 FROM base;
 
 CREATE TABLE automotor_modelo_descrip(
-cod_modelo_desc TINYINT PRIMARY KEY AUTO_INCREMENT,
+cod_modelo_desc SMALLINT PRIMARY KEY AUTO_INCREMENT,
+modelo_cod varchar(4),
 modelo_desc VARCHAR(50) NOT NULL);
+
+INSERT into automotor_modelo_descrip(modelo_cod,modelo_desc)
+SELECT DISTINCT base.automotor_modelo_codigo,base.automotor_modelo_descripcion
+FROM base;
 
 CREATE TABLE genero(
 cod_titular_gen TINYINT PRIMARY KEY AUTO_INCREMENT,
 titular_gen VARCHAR(50) NOT NULL);
 
---------------------------------------
---carga valores unicos de relacion ID-Descripcion
-INSERT INTO automotor_tipo_descrip (tipo_codigo,tipo_desc)
-SELECT DISTINCT base.automotor_tipo_codigo, base.automotor_tipo_descripcion
-FROM base WHERE base.automotor_tipo_descripcion IS NOT NULL;
+INSERT into genero(titular_gen)
+SELECT DISTINCT base.titular_genero
+FROM base;
+
+--3 generar referencias en la tabla principal a las tablas relacionadas------------------------------------
+
+---- remplazo a descripcion de los generos en la tabla base por la referencia a la tabla generos---
+UPDATE base
+JOIN genero
+ON base.titular_genero=genero.titular_gen
+SET base.titular_genero = genero.cod_titular_gen;
+--- el campo titular_genero se importo como varchar(255) pero ahora que solo tiene un numero no necesita ser tan grande. Lo hago tinyint porque
+-- ese tipo de dato es la clave primaria de la tabla y es necesario que sean iguales para hacer las reglas de integridad---
+ALTER TABLE base MODIFY titular_genero tinyint;
+--- agrego reglas de integridad referencial
+ALTER TABLE base
+ADD CONSTRAINT fk_genero
+FOREIGN KEY (titular_genero)
+REFERENCES genero(cod_titular_gen)
+ON DELETE RESTRICT
+ON UPDATE RESTRICT;
