@@ -1,5 +1,8 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 import mysql.connector
+import os
+from grafico import graf_edadpatente
+image_path = os.path.join('static', 'grafico.png')
 
 app = Flask(__name__)
 
@@ -22,8 +25,12 @@ def index():
     categorias = cursor.fetchall()  
     cursor.close()
     conn.close()
-   
     return render_template('index.html', categorias=categorias)
+
+@app.route('/edadpatente', methods=['GET', 'POST'])
+def edadpatente():
+    graf_edadpatente()
+    return render_template('grafico.html', graph=image_path)
 
 if __name__ == '__main__':
     app.run(debug=True)
