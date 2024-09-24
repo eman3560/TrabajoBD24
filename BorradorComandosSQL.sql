@@ -449,3 +449,51 @@ ALTER TABLE base MODIFY base.titular_pais_nacimiento varchar(20)
 ALTER TABLE base MODIFY base.titular_porcentaje_titularidad varchar(3)
 ALTER TABLE base MODIFY base.titular_domicilio_provincia_id varchar(2)
 ALTER TABLE base MODIFY base.titular_pais_nacimiento_id varchar(4)
+
+----------------
+-- vista de las principales 10 localidades en las que se patentaron autos
+CREATE VIEW InscripcionSF10 AS
+SELECT base.titular_domicilio_localidad, COUNT(base.titular_domicilio_localidad) AS totales, provincia.prov_nom
+FROM base, provincia
+WHERE base.titular_domicilio_provincia=provincia.prov_cod AND provincia.prov_nom="SANTA FE"
+GROUP BY base.titular_domicilio_localidad, provincia.prov_nom
+ORDER BY totales DESC LIMIT 10
+
+-- vista de cuantas inscripciones fueron realizadas a masculinos, femeninos y otros
+CREATE VIEW generos AS 
+SELECT genero.titular_gen, COUNT(*) AS Totales FROM genero, base
+WHERE base.titular_genero=genero.cod_titular_gen
+GROUP BY genero.titular_gen
+ORDER BY Totales desc
+
+--vista de las marcas que registraron mayor cantidad de patentamientos
+CREATE VIEW TotalMarcas as
+SELECT automotor_marca_descrip.marca_desc, COUNT(*) AS Totales FROM automotor_marca_descrip, base
+WHERE base.automotor_marca_codigo=automotor_marca_descrip.cod_marca_desc
+GROUP BY automotor_marca_descrip.marca_desc
+ORDER BY Totales desc
+
+--vista de marca y modelo más patentados durante julio
+CREATE VIEW MarcaModelo as
+SELECT automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc, COUNT(*) AS Totales
+FROM base, automotor_modelo_descrip,automotor_marca_descrip
+WHERE base.automotor_marca_codigo=automotor_marca_descrip.cod_marca_desc AND base.automotor_modelo_codigo=automotor_modelo_descrip.cod_modelo_desc
+GROUP BY automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc
+ORDER BY Totales desc
+
+--vista modelos de vehiculos y edad promedio de adquisicion
+CREATE VIEW ModelosEdad as
+SELECT automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc, COUNT(*) as totales, 2024-round(avg(base.titular_anio_nacimiento)) AS Edad
+FROM base, automotor_modelo_descrip,automotor_marca_descrip
+WHERE base.automotor_marca_codigo=automotor_marca_descrip.cod_marca_desc 
+AND base.automotor_modelo_codigo=automotor_modelo_descrip.cod_modelo_desc
+AND base.titular_tipo_persona!="Jurídica"
+GROUP BY automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc
+ORDER BY totales desc
+
+--distribucion de edades por inscripcion--
+CREATE VIEW InscripcionEdad AS 
+SELECT base.titular_anio_nacimiento, COUNT(*) as totales, 2024-round(avg(base.titular_anio_nacimiento)) AS Edad
+FROM base
+WHERE base.titular_tipo_persona!="Jurídica" AND base.automotor_uso_descripcion="Privado" AND base.titular_anio_nacimiento<"2011"
+GROUP BY base.titular_anio_nacimiento asc
