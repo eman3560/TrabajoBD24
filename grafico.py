@@ -46,5 +46,6 @@ def graf_edadpatente():
     plt.grid()
 
     image_path = os.path.join('static', 'grafico.png')
+    os.remove(image_path)
     plt.savefig(image_path)
     plt.close()  # Cerrar la figura para liberar memoria
