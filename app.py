@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, send_file
 import mysql.connector
 import os
-from grafico import graf_edadpatente
+from grafico import graf_edadpatente,graf_generos
 image_path = os.path.join('static', 'grafico.png')
 
 app = Flask(__name__)
@@ -17,19 +17,24 @@ def get_db_connection():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    resultados = None
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-    query = "SELECT * FROM provincia"
-    cursor.execute(query)
-    categorias = cursor.fetchall()  
-    cursor.close()
-    conn.close()
-    return render_template('index.html', categorias=categorias)
+    # resultados = None
+    # conn = get_db_connection()
+    # cursor = conn.cursor(dictionary=True)
+    # query = "SELECT * FROM provincia"
+    # cursor.execute(query)
+    # categorias = cursor.fetchall()  
+    # cursor.close()
+    # conn.close()
+    return render_template('base.html')
 
 @app.route('/edadpatente', methods=['GET', 'POST'])
 def edadpatente():
     graf_edadpatente()
+    return render_template('grafico.html', graph=image_path)
+
+@app.route('/generos', methods=['GET', 'POST'])
+def generos():
+    graf_generos()
     return render_template('grafico.html', graph=image_path)
 
 if __name__ == '__main__':
