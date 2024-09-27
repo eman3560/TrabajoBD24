@@ -517,7 +517,7 @@ ORDER BY Totales desc
 
 --vista modelos de vehiculos y edad promedio de adquisicion
 CREATE VIEW ModelosEdad as
-SELECT automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc, COUNT(*) as totales, 2024-round(avg(base.titular_anio_nacimiento)) AS Edad
+SELECT automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc, COUNT(*) as totales, YEAR(CURDATE())-round(avg(base.titular_anio_nacimiento)) AS Edad
 FROM base, automotor_modelo_descrip,automotor_marca_descrip
 WHERE base.automotor_marca_codigo=automotor_marca_descrip.cod_marca_desc 
 AND base.automotor_modelo_codigo=automotor_modelo_descrip.cod_modelo_desc
@@ -527,7 +527,7 @@ ORDER BY totales desc
 
 --distribucion de edades por inscripcion--
 CREATE VIEW InscripcionEdad AS 
-SELECT base.titular_anio_nacimiento, COUNT(*) as totales, 2024-round(avg(base.titular_anio_nacimiento)) AS Edad
+SELECT base.titular_anio_nacimiento, COUNT(*) as totales, YEAR(CURDATE())-round(avg(base.titular_anio_nacimiento)) AS Edad
 FROM base
 WHERE base.titular_tipo_persona!="Jurídica" AND base.automotor_uso_descripcion="Privado" AND base.titular_anio_nacimiento<"2011"
 GROUP BY base.titular_anio_nacimiento asc
