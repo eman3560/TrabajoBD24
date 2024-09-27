@@ -17,14 +17,14 @@ def get_db_connection():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    # resultados = None
-    # conn = get_db_connection()
-    # cursor = conn.cursor(dictionary=True)
-    # query = "SELECT * FROM provincia"
-    # cursor.execute(query)
-    # categorias = cursor.fetchall()  
-    # cursor.close()
-    # conn.close()
+    resultados = None
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    query = "SELECT * FROM provincia"
+    cursor.execute(query)
+    categorias = cursor.fetchall()  
+    cursor.close()
+    conn.close()
     return render_template('base.html')
 
 @app.route('/edadpatente', methods=['GET', 'POST'])
