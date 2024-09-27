@@ -25,7 +25,7 @@ def index():
     categorias = cursor.fetchall()  
     cursor.close()
     conn.close()
-    return render_template('base.html')
+    return render_template('base.html',categorias=categorias)
 
 @app.route('/edadpatente', methods=['GET', 'POST'])
 def edadpatente():
