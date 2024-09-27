@@ -18,6 +18,7 @@ CREATE DATABASE pat24;
 USE pat24;
 ```
 > Creación de la tabla principal de la base de datos.
+
 ```mysql
 CREATE TABLE base(
     base_cod MEDIUMINT PRIMARY KEY AUTO_INCREMENT,
@@ -50,6 +51,7 @@ CREATE TABLE base(
 ```
 
 > Carga del .csv al entorno.
+
 ```mysql
 LOAD DATA INFILE 'C:\\BasePatentes\\TrabajoBD24\\dnrpa.csv' 
 INTO TABLE base
@@ -67,6 +69,7 @@ titular_pais_nacimiento_id);
 
 > Normalización de los datos.
 - Columnas con cadenas de texto vacias pasandolas a NULL.
+
 ```mysql
 UPDATE base 
 SET 
@@ -293,42 +296,55 @@ WHERE
 ```
 
 > Creación de tablas importantes.
+
+- Tabla provincia.
 ```mysql
 CREATE TABLE provincia(
-prov_cod TINYINT PRIMARY KEY AUTO_INCREMENT,
-prov_nom VARCHAR(50) NOT null);
+prov_cod            TINYINT PRIMARY KEY AUTO_INCREMENT,
+prov_nom            VARCHAR(50) NOT null);
 
 INSERT INTO provincia(prov_nom) 
 SELECT DISTINCT registro_seccional_provincia
 FROM base;
-
+```
+- Tabla tipo de automotor .
+```mysql
 CREATE TABLE automotor_tipo_descrip(
-cod_tipo_desc TINYINT PRIMARY KEY AUTO_INCREMENT,
-tipo_cod VARCHAR(2),
-tipo_desc VARCHAR(50) NOT NULL);
+cod_tipo_desc       TINYINT PRIMARY KEY AUTO_INCREMENT,
+tipo_cod            VARCHAR(2),
+tipo_desc           VARCHAR(50) NOT NULL);
 
 INSERT INTO automotor_tipo_descrip(tipo_cod,tipo_desc)
 SELECT distinct base.automotor_tipo_codigo,base.automotor_tipo_descripcion
 FROM base;
+```
 
+- Tabla marca de automotor.
+```mysql
 CREATE TABLE automotor_marca_descrip(
-cod_marca_desc smallint PRIMARY KEY AUTO_INCREMENT,
-marca_cod varchar(4),
-marca_desc VARCHAR(50) NOT NULL);
+cod_marca_desc      SMALLINT PRIMARY KEY AUTO_INCREMENT,
+marca_cod           VARCHAR(4),
+marca_desc          VARCHAR(50) NOT NULL);
 
-insert into automotor_marca_descrip(marca_cod, marca_desc)
+INSERT INTO automotor_marca_descrip(marca_cod, marca_desc)
 SELECT DISTINCT base.automotor_marca_codigo,base.automotor_marca_descripcion
 FROM base;
+```
 
+- Tabla modelo de automotor.
+```mysql
 CREATE TABLE automotor_modelo_descrip(
-cod_modelo_desc SMALLINT PRIMARY KEY AUTO_INCREMENT,
-modelo_cod varchar(4),
-modelo_desc VARCHAR(50) NOT NULL);
+cod_modelo_desc     SMALLINT PRIMARY KEY AUTO_INCREMENT,
+modelo_cod          VARCHAR(4),
+modelo_desc         VARCHAR(50) NOT NULL);
 
 INSERT into automotor_modelo_descrip(modelo_cod,modelo_desc)
 SELECT DISTINCT base.automotor_modelo_codigo,base.automotor_modelo_descripcion
 FROM base;
+```
 
+- Género del titular.
+```mysql
 CREATE TABLE genero(
 cod_titular_gen TINYINT PRIMARY KEY AUTO_INCREMENT,
 titular_gen VARCHAR(50) NOT NULL);
@@ -355,7 +371,9 @@ FOREIGN KEY (titular_genero)
 REFERENCES genero(cod_titular_gen)
 ON DELETE RESTRICT
 ON UPDATE RESTRICT;
+```
 
+```mysql
 ###
 UPDATE base
 JOIN automotor_tipo_descrip
@@ -373,9 +391,9 @@ FOREIGN KEY (automotor_tipo_codigo)
 REFERENCES automotor_tipo_descrip(cod_tipo_desc)
 ON DELETE RESTRICT
 ON UPDATE RESTRICT;
-
+```
 ###
-
+```mysql
 UPDATE base
 JOIN automotor_marca_descrip
 ON base.automotor_marca_codigo=automotor_marca_descrip.marca_cod
@@ -392,9 +410,9 @@ FOREIGN KEY (automotor_marca_codigo)
 REFERENCES automotor_marca_descrip(cod_marca_desc)
 ON DELETE RESTRICT
 ON UPDATE RESTRICT;
-
+```
 ###
-
+```mysql
 UPDATE base
 JOIN automotor_modelo_descrip
 ON base.automotor_modelo_codigo=automotor_modelo_descrip.modelo_cod
@@ -411,9 +429,9 @@ FOREIGN KEY (automotor_modelo_codigo)
 REFERENCES automotor_modelo_descrip(cod_modelo_desc)
 ON DELETE RESTRICT
 ON UPDATE RESTRICT;
-
+```
 ### PROVINCIA DEL REGISTRO DONDE SE INSCRIBIO EL AUTO
-
+```mysql
 UPDATE base
 JOIN provincia
 ON base.registro_seccional_provincia=provincia.prov_nom
@@ -427,8 +445,9 @@ FOREIGN KEY (registro_seccional_provincia)
 REFERENCES provincia(prov_cod)
 ON DELETE RESTRICT
 ON UPDATE RESTRICT;
-
+```
 ### PROVINCIA DEL COMPRADOR DEL AUTO
+```mysql
 UPDATE base
 JOIN provincia
 ON base.registro_seccional_provincia=provincia.prov_nom
@@ -464,9 +483,11 @@ FOREIGN KEY (titular_domicilio_provincia)
 REFERENCES provincia(prov_cod)
 ON DELETE RESTRICT
 ON UPDATE RESTRICT;
+```
 -----------------------
 --editando el resto de los campos para disminur tamaño BD. Inicial 14,1
 
+```mysql
 ALTER TABLE base MODIFY base.tramite_tipo VARCHAR(60)
 ALTER TABLE base MODIFY tramite_fecha date
 ALTER TABLE base MODIFY base.fecha_inscripcion_inicial date
@@ -483,8 +504,9 @@ ALTER TABLE base MODIFY base.titular_pais_nacimiento varchar(20)
 ALTER TABLE base MODIFY base.titular_porcentaje_titularidad varchar(3)
 ALTER TABLE base MODIFY base.titular_domicilio_provincia_id varchar(2)
 ALTER TABLE base MODIFY base.titular_pais_nacimiento_id varchar(4)
-
-``` VISTAS Y CONSULTAS
+```
+```mysql
+ VISTAS Y CONSULTAS
 -- vista de las principales 10 localidades en las que se patentaron autos
 CREATE VIEW InscripcionSF10 AS
 SELECT base.titular_domicilio_localidad, COUNT(base.titular_domicilio_localidad) AS totales, provincia.prov_nom
@@ -492,30 +514,37 @@ FROM base, provincia
 WHERE base.titular_domicilio_provincia=provincia.prov_cod AND provincia.prov_nom="SANTA FE"
 GROUP BY base.titular_domicilio_localidad, provincia.prov_nom
 ORDER BY totales DESC LIMIT 10
-
+```
 -- vista de cuantas inscripciones fueron realizadas a masculinos, femeninos y otros
+```mysql
 CREATE VIEW generos AS 
 SELECT genero.titular_gen, COUNT(*) AS Totales FROM genero, base
 WHERE base.titular_genero=genero.cod_titular_gen
 GROUP BY genero.titular_gen
 ORDER BY Totales desc
+```
 
 --vista de las marcas que registraron mayor cantidad de patentamientos
+```mysql
 CREATE VIEW TotalMarcas as
 SELECT automotor_marca_descrip.marca_desc, COUNT(*) AS Totales FROM automotor_marca_descrip, base
 WHERE base.automotor_marca_codigo=automotor_marca_descrip.cod_marca_desc
 GROUP BY automotor_marca_descrip.marca_desc
 ORDER BY Totales desc
+```
 
 --vista de marca y modelo más patentados durante julio
+```mysql
 CREATE VIEW MarcaModelo as
 SELECT automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc, COUNT(*) AS Totales
 FROM base, automotor_modelo_descrip,automotor_marca_descrip
 WHERE base.automotor_marca_codigo=automotor_marca_descrip.cod_marca_desc AND base.automotor_modelo_codigo=automotor_modelo_descrip.cod_modelo_desc
 GROUP BY automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc
 ORDER BY Totales desc
+```
 
 --vista modelos de vehiculos y edad promedio de adquisicion
+```mysql
 CREATE VIEW ModelosEdad as
 SELECT automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc, COUNT(*) as totales, YEAR(CURDATE())-round(avg(base.titular_anio_nacimiento)) AS Edad
 FROM base, automotor_modelo_descrip,automotor_marca_descrip
@@ -524,10 +553,13 @@ AND base.automotor_modelo_codigo=automotor_modelo_descrip.cod_modelo_desc
 AND base.titular_tipo_persona!="Jurídica"
 GROUP BY automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc
 ORDER BY totales desc
+```
 
 --distribucion de edades por inscripcion--
+```mysql
 CREATE VIEW InscripcionEdad AS 
 SELECT base.titular_anio_nacimiento, COUNT(*) as totales, YEAR(CURDATE())-round(avg(base.titular_anio_nacimiento)) AS Edad
 FROM base
 WHERE base.titular_tipo_persona!="Jurídica" AND base.automotor_uso_descripcion="Privado" AND base.titular_anio_nacimiento<"2011"
 GROUP BY base.titular_anio_nacimiento asc
+```
