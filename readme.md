@@ -441,7 +441,7 @@ JOIN provincia
 ON base.registro_seccional_provincia=provincia.prov_nom
 SET base.registro_seccional_provincia=provincia.prov_cod
 
-ALTER TABLE base MODIFY base.registro_seccional_provincia tinyint;
+ALTER TABLE base MODIFY base.registro_seccional_provincia TINYINT;
 
 ALTER TABLE base
 ADD CONSTRAINT fk_prov_secc
