@@ -406,9 +406,9 @@ UPDATE base
 JOIN automotor_marca_descrip
 ON base.automotor_marca_codigo = automotor_marca_descrip.marca_cod
 AND base.automotor_marca_descripcion = automotor_marca_descrip.marca_desc
-SET base.automotor_marca_codigo = automotor_marca_descrip.cod_marca_desc
+SET base.automotor_marca_codigo = automotor_marca_descrip.cod_marca_desc;
 
-ALTER TABLE base MODIFY base.automotor_marca_codigo smallint;
+ALTER TABLE base MODIFY base.automotor_marca_codigo SMALLINT;
 
 ALTER TABLE base DROP COLUMN base.automotor_marca_descripcion;
 
