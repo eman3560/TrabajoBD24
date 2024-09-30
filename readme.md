@@ -439,12 +439,14 @@ ON DELETE RESTRICT
 ON UPDATE RESTRICT;
 ```
 
+DUPLICADO
+
 ### Provincia del registro donde se inscribio el auto.
 ```mysql
 UPDATE base
 JOIN provincia
 ON base.registro_seccional_provincia=provincia.prov_nom
-SET base.registro_seccional_provincia=provincia.prov_cod
+SET base.registro_seccional_provincia=provincia.prov_cod;
 
 ALTER TABLE base MODIFY base.registro_seccional_provincia TINYINT;
 
@@ -481,7 +483,7 @@ JOIN provincia
 ON base.titular_domicilio_provincia = provincia.prov_nom
 SET base.titular_domicilio_provincia = provincia.prov_cod;
 
-ALTER TABLE base MODIFY base.titular_domicilio_provincia TINYINT;
+ALTER TABLE base MODIFY base.titular_domicilio_provincia TINYINT; // Error sql 1292
 
 UPDATE base 
 SET base.titular_domicilio_provincia = base.registro_seccional_provincia
