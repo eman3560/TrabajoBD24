@@ -15,7 +15,7 @@ La Base de Datos de Registros de la Propiedad Automotor está diseñada para alm
 git clone https://github.com/eman3560/TrabajoBD24.git
 ```
 
-- Una vez clonado, [crear la base](#creación-y-uso-de-la-base-de-datos) y [crear la tabla](#creación-de-la-tabla-principal-de-la-base-de-datos) 
+- Una vez clonado, [crear la base](#creación-y-uso-de-la-base-de-datos) y [crear la tabla.](#creación-de-la-tabla-principal-de-la-base-de-datos) 
 
 - Luego se elegirá una forma de importar el .csv.
 
