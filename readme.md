@@ -26,6 +26,7 @@ git clone https://github.com/eman3560/TrabajoBD24.git
     ![image](Imagenes/importacion.png)
     
     En la importacion, se debe:
+    
         - Ignorar la primera fila.
         - Ignorar la primera columna.
         - Y controlar los campos de caracteres de control.
