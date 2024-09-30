@@ -16,7 +16,7 @@ git clone https://github.com/eman3560/TrabajoBD24.git
 ```
 
 
-- Importación al motor de base de datos.
+- Una vez clonado importar al motor de base de datos.
 
     - Por UI.
 
