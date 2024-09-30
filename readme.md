@@ -26,10 +26,10 @@ git clone https://github.com/eman3560/TrabajoBD24.git
     ![image](Imagenes/importacion.png)
     
     En la importacion, se debe:
-    
-        - Ignorar la primera fila.
-        - Ignorar la primera columna.
-        - Y controlar los campos de caracteres de control.
+
+    - Ignorar la primera fila.
+    - Ignorar la primera columna.
+    - Y controlar los campos de caracteres de control.
 
     ![image](Imagenes/importacion2.png)
 
@@ -46,38 +46,38 @@ USE pat24;
 ### Creación de la tabla principal de la base de datos.
 ```mysql
 CREATE TABLE base(
-    base_cod                        MEDIUMINT PRIMARY KEY AUTO_INCREMENT,
-    tramite_tipo	                VARCHAR(255),
-    tramite_fecha	                VARCHAR(255),
-    fecha_inscripcion_inicial	    VARCHAR(255),
-    registro_seccional_codigo	    VARCHAR(255),
-    registro_seccional_descripcion	VARCHAR(255),
-    registro_seccional_provincia	VARCHAR(255),
-    automotor_origen	            VARCHAR(255),
-    automotor_anio_modelo	        VARCHAR(255),
-    automotor_tipo_codigo	        VARCHAR(255),
-    automotor_tipo_descripcion	    VARCHAR(255),
-    automotor_marca_codigo	        VARCHAR(255),
-    automotor_marca_descripcion	    VARCHAR(255),
-    automotor_modelo_codigo	        VARCHAR(255),
-    automotor_modelo_descripcion	VARCHAR(255),
-    automotor_uso_codigo	        VARCHAR(255),
-    automotor_uso_descripcion	    VARCHAR(255),
-    titular_tipo_persona	        VARCHAR(255),
-    titular_domicilio_localidad	    VARCHAR(255),
-    titular_domicilio_provincia	    VARCHAR(255),
-    titular_genero	                VARCHAR(255),
-    titular_anio_nacimiento	        VARCHAR(255),
-    titular_pais_nacimiento	        VARCHAR(255),
-    titular_porcentaje_titularidad	VARCHAR(255),
-    titular_domicilio_provincia_id	VARCHAR(255),
-    titular_pais_nacimiento_id	    VARCHAR(255) 
+    base_cod                        	MEDIUMINT PRIMARY KEY AUTO_INCREMENT,
+    tramite_tipo	                		VARCHAR(255),
+    tramite_fecha	                		VARCHAR(255),
+    fecha_inscripcion_inicial	    		VARCHAR(255),
+    registro_seccional_codigo	    		VARCHAR(255),
+    registro_seccional_descripcion		VARCHAR(255),
+    registro_seccional_provincia			VARCHAR(255),
+    automotor_origen	            		VARCHAR(255),
+    automotor_anio_modelo	        		VARCHAR(255),
+    automotor_tipo_codigo	        		VARCHAR(255),
+    automotor_tipo_descripcion	    	VARCHAR(255),
+    automotor_marca_codigo	        		VARCHAR(255),
+    automotor_marca_descripcion	    	VARCHAR(255),
+    automotor_modelo_codigo	        	VARCHAR(255),
+    automotor_modelo_descripcion			VARCHAR(255),
+    automotor_uso_codigo	        		VARCHAR(255),
+    automotor_uso_descripcion	   		VARCHAR(255),
+    titular_tipo_persona	        		VARCHAR(255),
+    titular_domicilio_localidad	    	VARCHAR(255),
+    titular_domicilio_provincia	    	VARCHAR(255),
+    titular_genero	                	VARCHAR(255),
+    titular_anio_nacimiento	        	VARCHAR(255),
+    titular_pais_nacimiento	        	VARCHAR(255),
+    titular_porcentaje_titularidad		VARCHAR(255),
+    titular_domicilio_provincia_id		VARCHAR(255),
+    titular_pais_nacimiento_id	    	VARCHAR(255) 
 );
 ```
 
 ### Carga del .csv al entorno.
 ```mysql
-LOAD DATA INFILE 'C:\\BasePatentes\\TrabajoBD24\\dnrpa.csv' # Poner localización actual del csv
+LOAD DATA LOCAL INFILE 'C:\\BasePatentes\\TrabajoBD24\\dnrpa.csv' # Poner localización actual del csv
 INTO TABLE base
 FIELDS TERMINATED BY ',' 
 ENCLOSED BY '"' 
@@ -315,7 +315,7 @@ tipo_desc            VARCHAR(50) NOT NULL
 );
 
 INSERT INTO automotor_tipo_descrip(tipo_cod,tipo_desc)
-SELECT distinct base.automotor_tipo_codigo,base.automotor_tipo_descripcion
+SELECT distinct base.automotor_tipo_codigo, base.automotor_tipo_descripcion
 FROM base;
 ```
 
@@ -328,7 +328,7 @@ marca_desc          VARCHAR(50) NOT NULL
 );
 
 INSERT INTO automotor_marca_descrip(marca_cod, marca_desc)
-SELECT DISTINCT base.automotor_marca_codigo,base.automotor_marca_descripcion
+SELECT DISTINCT base.automotor_marca_codigo, base.automotor_marca_descripcion
 FROM base;
 ```
 
@@ -341,7 +341,7 @@ modelo_desc         VARCHAR(50) NOT NULL
 );
 
 INSERT into automotor_modelo_descrip(modelo_cod,modelo_desc)
-SELECT DISTINCT base.automotor_modelo_codigo,base.automotor_modelo_descripcion
+SELECT DISTINCT base.automotor_modelo_codigo, base.automotor_modelo_descripcion
 FROM base;
 ```
 
