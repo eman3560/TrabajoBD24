@@ -76,7 +76,7 @@ CREATE TABLE base(
 
 ### Carga del .csv al entorno.
 ```mysql
-LOAD DATA INFILE 'C:\\BasePatentes\\TrabajoBD24\\dnrpa.csv' 
+LOAD DATA INFILE 'C:\\BasePatentes\\TrabajoBD24\\dnrpa.csv' # Poner localización actual del csv
 INTO TABLE base
 FIELDS TERMINATED BY ',' 
 ENCLOSED BY '"' 
