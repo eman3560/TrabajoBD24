@@ -425,7 +425,7 @@ UPDATE base
 JOIN automotor_modelo_descrip
 ON base.automotor_modelo_codigo = automotor_modelo_descrip.modelo_cod
 AND base.automotor_modelo_descripcion = automotor_modelo_descrip.modelo_desc
-SET base.automotor_modelo_codigo = automotor_modelo_descrip.cod_modelo_desc
+SET base.automotor_modelo_codigo = automotor_modelo_descrip.cod_modelo_desc;
 
 ALTER TABLE base MODIFY base.automotor_modelo_codigo SMALLINT;
 
@@ -461,7 +461,7 @@ ON UPDATE RESTRICT;
 UPDATE base
 JOIN provincia
 ON base.registro_seccional_provincia = provincia.prov_nom
-SET base.registro_seccional_provincia = provincia.prov_cod
+SET base.registro_seccional_provincia = provincia.prov_cod;
 
 ALTER TABLE base MODIFY base.registro_seccional_provincia TINYINT;
 
