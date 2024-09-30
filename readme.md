@@ -9,13 +9,19 @@ La Base de Datos de Registros de la Propiedad Automotor está diseñada para alm
 
 ### **4.** Instalacion
 
-- Descarga del archivo .csv
+- Clonación del repositorio hacia una carpeta cualquiera.
+
+```
+git clone https://github.com/eman3560/TrabajoBD24.git
+```
 
 
 - Importación al motor de base de datos.
 
     - Por UI.
+
     > Una vez creada la base de datos y la tabla principal, la cual contiene toda la fila 1 del .csv, se importa como en la siguiente imagen.
+
     ![image](Imagenes/importacion.png)
     
     > En la importacion, se debe:
@@ -23,10 +29,10 @@ La Base de Datos de Registros de la Propiedad Automotor está diseñada para alm
         - Ignorar la primera fila.
         - Ignorar la primera columna.
         - Y controlar los campos de caracteres de control.
-        
+
     ![image](Imagenes/importacion2.png)
 
-    - [Por comandos SQL](#Carga-del-.csv-al-entorno.)
+    - [Por comandos SQL.](#carga-del-csv-al-entorno)
 
 ### **5.** Sentencias
 
