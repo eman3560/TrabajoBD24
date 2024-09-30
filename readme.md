@@ -483,7 +483,20 @@ JOIN provincia
 ON base.titular_domicilio_provincia = provincia.prov_nom
 SET base.titular_domicilio_provincia = provincia.prov_cod;
 
-ALTER TABLE base MODIFY base.titular_domicilio_provincia TINYINT; // Error sql 1292
+# Correccion de error
+UPDATE base
+SET titular_domicilio_provincia = 11
+WHERE titular_domicilio_provincia = 'C.AUTONOMA DE BS.AS';
+
+UPDATE base
+SET titular_domicilio_provincia = 15
+WHERE titular_domicilio_provincia = 'T.DEL FUEGO';
+
+UPDATE base
+SET titular_domicilio_provincia = 21
+WHERE titular_domicilio_provincia = 'SGO.DEL ESTERO';
+
+ALTER TABLE base MODIFY base.titular_domicilio_provincia TINYINT; // Error sql 1292, error corregido por lo anterior
 
 UPDATE base 
 SET base.titular_domicilio_provincia = base.registro_seccional_provincia
@@ -500,33 +513,33 @@ ON UPDATE RESTRICT;
 ### Editando el resto de los campos para disminur el tamaño de la Base de Datos.
 
 ```mysql
-ALTER TABLE base MODIFY base.tramite_tipo VARCHAR(60)
-ALTER TABLE base MODIFY tramite_fecha date
-ALTER TABLE base MODIFY base.fecha_inscripcion_inicial date
-ALTER TABLE base MODIFY registro_seccional_codigo varchar(5)
-ALTER TABLE base MODIFY registro_seccional_descripcion varchar(50)
-ALTER TABLE base MODIFY automotor_origen varchar(12)
-ALTER TABLE base MODIFY base.automotor_anio_modelo VARCHAR(5)
-ALTER TABLE base MODIFY base.automotor_uso_codigo VARCHAR(1)
-ALTER TABLE base MODIFY base.automotor_uso_descripcion varchar(7)  
-ALTER TABLE base MODIFY base.titular_tipo_persona varchar(9)
-ALTER TABLE base MODIFY base.titular_domicilio_localidad varchar(42)
-ALTER TABLE base MODIFY base.titular_anio_nacimiento varchar(5)
-ALTER TABLE base MODIFY base.titular_pais_nacimiento varchar(20)
-ALTER TABLE base MODIFY base.titular_porcentaje_titularidad varchar(3)
-ALTER TABLE base MODIFY base.titular_domicilio_provincia_id varchar(2)
-ALTER TABLE base MODIFY base.titular_pais_nacimiento_id varchar(4)
+ALTER TABLE base MODIFY base.tramite_tipo VARCHAR(60);
+ALTER TABLE base MODIFY tramite_fecha DATE;
+ALTER TABLE base MODIFY base.fecha_inscripcion_inicial DATE;
+ALTER TABLE base MODIFY registro_seccional_codigo VARCHAR(5);
+ALTER TABLE base MODIFY registro_seccional_descripcion VARCHAR(50);
+ALTER TABLE base MODIFY automotor_origen VARCHAR(12);
+ALTER TABLE base MODIFY base.automotor_anio_modelo VARCHAR(5);
+ALTER TABLE base MODIFY base.automotor_uso_codigo VARCHAR(1);
+ALTER TABLE base MODIFY base.automotor_uso_descripcion VARCHAR(7);
+ALTER TABLE base MODIFY base.titular_tipo_persona VARCHAR(9);
+ALTER TABLE base MODIFY base.titular_domicilio_localidad VARCHAR(42);
+ALTER TABLE base MODIFY base.titular_anio_nacimiento VARCHAR(5);
+ALTER TABLE base MODIFY base.titular_pais_nacimiento VARCHAR(20);
+ALTER TABLE base MODIFY base.titular_porcentaje_titularidad VARCHAR(3);
+ALTER TABLE base MODIFY base.titular_domicilio_provincia_id VARCHAR(2);
+ALTER TABLE base MODIFY base.titular_pais_nacimiento_id VARCHAR(4);
 ```
 ### Vistas y Consultas
 
 > Vista de las principales 10 localidades en las que se patentaron autos.
 ```mysql
 CREATE VIEW InscripcionSF10 AS
-SELECT base.titular_domicilio_localidad, COUNT(base.titular_domicilio_localidad) AS totales, provincia.prov_nom
+SELECT base.titular_domicilio_localidad, COUNT(base.titular_domicilio_localidad) AS Totales, provincia.prov_nom
 FROM base, provincia
-WHERE base.titular_domicilio_provincia=provincia.prov_cod AND provincia.prov_nom = "SANTA FE"
+WHERE base.titular_domicilio_provincia = provincia.prov_cod AND provincia.prov_nom = "SANTA FE"
 GROUP BY base.titular_domicilio_localidad, provincia.prov_nom
-ORDER BY totales DESC LIMIT 10;
+ORDER BY Totales DESC LIMIT 10;
 ```
 
 > Vista de cuantas inscripciones fueron realizadas a masculinos, femeninos y otros.
@@ -536,7 +549,7 @@ CREATE VIEW generos AS
 SELECT genero.titular_gen, COUNT(*) AS Totales FROM genero, base
 WHERE base.titular_genero = genero.cod_titular_gen
 GROUP BY genero.titular_gen
-ORDER BY Totales desc;
+ORDER BY Totales DESC;
 ```
 
 > Vista de las marcas que registraron mayor cantidad de patentamientos.
