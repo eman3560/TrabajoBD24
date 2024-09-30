@@ -364,13 +364,13 @@ FROM base;
 
 UPDATE base
 JOIN genero
-ON base.titular_genero=genero.titular_gen
+ON base.titular_genero = genero.titular_gen
 SET base.titular_genero = genero.cod_titular_gen;
 
 # El campo titular_genero se importo como varchar(255) pero ahora que solo tiene un número no necesita ser tan grande. Lo hago tinyint porque
 # ese tipo de dato es la clave primaria de la tabla y es necesario que sean iguales para hacer las reglas de integridad.
 
-ALTER TABLE base MODIFY titular_genero tinyint;
+ALTER TABLE base MODIFY titular_genero TINYINT;
 
 # Agrego reglas de integridad referencial.
 
@@ -404,9 +404,9 @@ ON UPDATE RESTRICT;
 ```mysql
 UPDATE base
 JOIN automotor_marca_descrip
-ON base.automotor_marca_codigo=automotor_marca_descrip.marca_cod
-AND base.automotor_marca_descripcion=automotor_marca_descrip.marca_desc
-SET base.automotor_marca_codigo=automotor_marca_descrip.cod_marca_desc
+ON base.automotor_marca_codigo = automotor_marca_descrip.marca_cod
+AND base.automotor_marca_descripcion = automotor_marca_descrip.marca_desc
+SET base.automotor_marca_codigo = automotor_marca_descrip.cod_marca_desc
 
 ALTER TABLE base MODIFY base.automotor_marca_codigo smallint;
 
@@ -423,11 +423,11 @@ ON UPDATE RESTRICT;
 ```mysql
 UPDATE base
 JOIN automotor_modelo_descrip
-ON base.automotor_modelo_codigo=automotor_modelo_descrip.modelo_cod
-AND base.automotor_modelo_descripcion=automotor_modelo_descrip.modelo_desc
-SET base.automotor_modelo_codigo=automotor_modelo_descrip.cod_modelo_desc
+ON base.automotor_modelo_codigo = automotor_modelo_descrip.modelo_cod
+AND base.automotor_modelo_descripcion = automotor_modelo_descrip.modelo_desc
+SET base.automotor_modelo_codigo = automotor_modelo_descrip.cod_modelo_desc
 
-ALTER TABLE base MODIFY base.automotor_modelo_codigo smallint;
+ALTER TABLE base MODIFY base.automotor_modelo_codigo SMALLINT;
 
 ALTER TABLE base DROP COLUMN base.automotor_modelo_descripcion;
 
@@ -460,8 +460,8 @@ ON UPDATE RESTRICT;
 ```mysql
 UPDATE base
 JOIN provincia
-ON base.registro_seccional_provincia=provincia.prov_nom
-SET base.registro_seccional_provincia=provincia.prov_cod
+ON base.registro_seccional_provincia = provincia.prov_nom
+SET base.registro_seccional_provincia = provincia.prov_cod
 
 ALTER TABLE base MODIFY base.registro_seccional_provincia TINYINT;
 
@@ -478,14 +478,14 @@ ON UPDATE RESTRICT;
 ```mysql
 UPDATE base
 JOIN provincia
-ON base.titular_domicilio_provincia=provincia.prov_nom
-SET base.titular_domicilio_provincia=provincia.prov_cod;
+ON base.titular_domicilio_provincia = provincia.prov_nom
+SET base.titular_domicilio_provincia = provincia.prov_cod;
 
 ALTER TABLE base MODIFY base.titular_domicilio_provincia TINYINT;
 
 UPDATE base 
-SET base.titular_domicilio_provincia=base.registro_seccional_provincia
-WHERE base.titular_domicilio_provincia=0;
+SET base.titular_domicilio_provincia = base.registro_seccional_provincia
+WHERE base.titular_domicilio_provincia = 0;
 
 ALTER TABLE base
 ADD CONSTRAINT fk_prov_mod
@@ -516,6 +516,7 @@ ALTER TABLE base MODIFY base.titular_domicilio_provincia_id varchar(2)
 ALTER TABLE base MODIFY base.titular_pais_nacimiento_id varchar(4)
 ```
 ### Vistas y Consultas
+
 > Vista de las principales 10 localidades en las que se patentaron autos.
 ```mysql
 CREATE VIEW InscripcionSF10 AS
@@ -539,7 +540,7 @@ ORDER BY Totales desc;
 > Vista de las marcas que registraron mayor cantidad de patentamientos.
 
 ```mysql
-CREATE VIEW TotalMarcas as
+CREATE VIEW TotalMarcas AS
 SELECT automotor_marca_descrip.marca_desc, COUNT(*) AS Totales FROM automotor_marca_descrip, base
 WHERE base.automotor_marca_codigo = automotor_marca_descrip.cod_marca_desc
 GROUP BY automotor_marca_descrip.marca_desc
@@ -549,9 +550,9 @@ ORDER BY Totales desc;
 > Vista de marca y modelo más patentados durante Julio.
 
 ```mysql
-CREATE VIEW MarcaModelo as
+CREATE VIEW MarcaModelo AS
 SELECT automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc, COUNT(*) AS Totales
-FROM base, automotor_modelo_descrip,automotor_marca_descrip
+FROM base, automotor_modelo_descrip, automotor_marca_descrip
 WHERE base.automotor_marca_codigo = automotor_marca_descrip.cod_marca_desc AND base.automotor_modelo_codigo = automotor_modelo_descrip.cod_modelo_desc
 GROUP BY automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc
 ORDER BY Totales desc;
@@ -561,20 +562,20 @@ ORDER BY Totales desc;
 
 ```mysql
 CREATE VIEW ModelosEdad as
-SELECT automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc, COUNT(*) as totales, YEAR(CURDATE())-round(avg(base.titular_anio_nacimiento)) AS Edad
-FROM base, automotor_modelo_descrip,automotor_marca_descrip
+SELECT automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc, COUNT(*) AS Totales, YEAR(CURDATE())-round(avg(base.titular_anio_nacimiento)) AS Edad
+FROM base, automotor_modelo_descrip, automotor_marca_descrip
 WHERE base.automotor_marca_codigo = automotor_marca_descrip.cod_marca_desc 
 AND base.automotor_modelo_codigo = automotor_modelo_descrip.cod_modelo_desc
 AND base.titular_tipo_persona != "Jurídica"
 GROUP BY automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc
-ORDER BY totales desc;
+ORDER BY Totales desc;
 ```
 
 > Distribución de edades por inscripción.
 
 ```mysql
 CREATE VIEW InscripcionEdad AS 
-SELECT base.titular_anio_nacimiento, COUNT(*) as totales, YEAR(CURDATE())-round(avg(base.titular_anio_nacimiento)) AS Edad
+SELECT base.titular_anio_nacimiento, COUNT(*) AS Totales, YEAR(CURDATE())-round(avg(base.titular_anio_nacimiento)) AS Edad
 FROM base
 WHERE base.titular_tipo_persona != "Jurídica" AND base.automotor_uso_descripcion = "Privado" AND base.titular_anio_nacimiento < "2011"
 GROUP BY base.titular_anio_nacimiento asc;
