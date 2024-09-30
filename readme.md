@@ -383,7 +383,6 @@ ON UPDATE RESTRICT;
 ```
 
 ```mysql
-###
 UPDATE base
 JOIN automotor_tipo_descrip
 ON base.automotor_tipo_codigo = automotor_tipo_descrip.tipo_cod 
@@ -442,7 +441,6 @@ ON UPDATE RESTRICT;
 
 ### Provincia del registro donde se inscribio el auto.
 ```mysql
-
 UPDATE base
 JOIN provincia
 ON base.registro_seccional_provincia=provincia.prov_nom
