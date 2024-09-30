@@ -35,6 +35,11 @@ git clone https://github.com/eman3560/TrabajoBD24.git
 
     - [Por comandos SQL.](#carga-del-csv-al-entorno)
 
+<hr>
+
+
+
+
 ### **4.** Sentencias
 
 ### Creación y uso de la base de datos.
