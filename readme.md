@@ -17,11 +17,11 @@ La Base de Datos de Registros de la Propiedad Automotor está diseñada para alm
     - Por UI.
     > Una vez creada la base de datos y la tabla principal, la cual contiene toda la fila 1 del .csv, se importa como en la siguiente imagen.
     ![image](Imagenes/importacion.png)
+    
     > En la importacion, se debe:
         - Ignorar la primera fila.
         - Ignorar la primera columna.
         - Y controlar los campos de caracteres de control.
-    
     ![image](Imagenes/importacion2.png)
 
     - [Por comandos SQL](#Carga-del-.csv-al-entorno.)
