@@ -37,6 +37,21 @@ git clone https://github.com/eman3560/TrabajoBD24.git
 
 <hr>
 
+- Importar dump sql.
+
+> Ir a Archivo > Ejecutar Archivo SQL.
+
+![image](Imagenes/dump1.png)
+
+> Buscar el dump.sql y abrirlo.
+
+![image](Imagenes/dump2.png)
+
+> Una vez abierto confirmar la auto detección de codificación.
+
+![image](Imagenes/dump3.png)
+
+
 
 
 
