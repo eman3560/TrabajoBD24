@@ -1,22 +1,40 @@
-# (Poner titulo)
+# Base de datos de registros de la propiedad de automotor.
 
 ### **1.** Introducción
+
+La Base de Datos de Registros de la Propiedad Automotor está diseñada para almacenar y gestionar información sobre el registro de vehículos en el país. Esta base incluye detalles sobre los automotores, sus titulares, fechas de inscripción, y los registros seccionales donde fueron inscriptos.
 
 ### **3.** Diagrama de base de datos
 ![image](https://github.com/user-attachments/assets/89db22a3-a5ff-4a08-bce2-297e61937b60)
 
 ### **4.** Instalacion
 
+- Descarga del archivo .csv
+
+
+- Importación al motor de base de datos.
+
+    - Por UI.
+    > Una vez creada la base de datos y la tabla principal, la cual contiene toda la fila 1 del .csv, se importa como en la siguiente imagen.
+    ![image](Imagenes/importacion.png)
+    > En la importacion, se debe:
+        - Ignorar la primera fila.
+        - Ignorar la primera columna.
+        - Y controlar los campos de caracteres de control.
+    
+    ![image](Imagenes/importacion2.png)
+
+    - [Por comandos SQL](#Carga-del-.csv-al-entorno.)
+
 ### **5.** Sentencias
 
-> Creación y uso de la base de datos.
-
+### Creación y uso de la base de datos.
 ```mysql
 CREATE DATABASE pat24;
 USE pat24;
 ```
-> Creación de la tabla principal de la base de datos.
 
+### Creación de la tabla principal de la base de datos.
 ```mysql
 CREATE TABLE base(
     base_cod                        MEDIUMINT PRIMARY KEY AUTO_INCREMENT,
@@ -48,8 +66,7 @@ CREATE TABLE base(
 );
 ```
 
-> Carga del .csv al entorno.
-
+### Carga del .csv al entorno.
 ```mysql
 LOAD DATA INFILE 'C:\\BasePatentes\\TrabajoBD24\\dnrpa.csv' 
 INTO TABLE base
@@ -65,9 +82,8 @@ titular_anio_nacimiento, titular_pais_nacimiento, titular_porcentaje_titularidad
 titular_pais_nacimiento_id);
 ```
 
-> Normalización de los datos.
+### Normalización de los datos.
 - Columnas con cadenas de texto vacias pasandolas a NULL.
-
 ```mysql
 UPDATE base 
 SET 
@@ -268,8 +284,8 @@ WHERE
     titular_pais_nacimiento_id = '';
 ```
 
-> Creación de tablas importantes.
-> Inserción de las columnas de la tabla base a sus tablas.
+### Creación de tablas importantes.
+### Inserción de las columnas de la tabla base a sus tablas.
 
 - Tabla provincia.
 ```mysql
@@ -473,7 +489,7 @@ ON DELETE RESTRICT
 ON UPDATE RESTRICT;
 ```
 
-> Editando el resto de los campos para disminur el tamaño de la Base de Datos.
+### Editando el resto de los campos para disminur el tamaño de la Base de Datos.
 
 ```mysql
 ALTER TABLE base MODIFY base.tramite_tipo VARCHAR(60)
@@ -493,11 +509,9 @@ ALTER TABLE base MODIFY base.titular_porcentaje_titularidad varchar(3)
 ALTER TABLE base MODIFY base.titular_domicilio_provincia_id varchar(2)
 ALTER TABLE base MODIFY base.titular_pais_nacimiento_id varchar(4)
 ```
->  Vistas y Consultas
+### Vistas y Consultas
+> Vista de las principales 10 localidades en las que se patentaron autos.
 ```mysql
-
-# Vista de las principales 10 localidades en las que se patentaron autos.
-
 CREATE VIEW InscripcionSF10 AS
 SELECT base.titular_domicilio_localidad, COUNT(base.titular_domicilio_localidad) AS totales, provincia.prov_nom
 FROM base, provincia
@@ -505,7 +519,9 @@ WHERE base.titular_domicilio_provincia=provincia.prov_cod AND provincia.prov_nom
 GROUP BY base.titular_domicilio_localidad, provincia.prov_nom
 ORDER BY totales DESC LIMIT 10;
 ```
+
 > Vista de cuantas inscripciones fueron realizadas a masculinos, femeninos y otros.
+
 ```mysql
 CREATE VIEW generos AS 
 SELECT genero.titular_gen, COUNT(*) AS Totales FROM genero, base
@@ -515,6 +531,7 @@ ORDER BY Totales desc;
 ```
 
 > Vista de las marcas que registraron mayor cantidad de patentamientos.
+
 ```mysql
 CREATE VIEW TotalMarcas as
 SELECT automotor_marca_descrip.marca_desc, COUNT(*) AS Totales FROM automotor_marca_descrip, base
@@ -524,6 +541,7 @@ ORDER BY Totales desc;
 ```
 
 > Vista de marca y modelo más patentados durante Julio.
+
 ```mysql
 CREATE VIEW MarcaModelo as
 SELECT automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc, COUNT(*) AS Totales
@@ -534,6 +552,7 @@ ORDER BY Totales desc;
 ```
 
 > Vista modelos de vehiculos y edad promedio de adquisición.
+
 ```mysql
 CREATE VIEW ModelosEdad as
 SELECT automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc, COUNT(*) as totales, YEAR(CURDATE())-round(avg(base.titular_anio_nacimiento)) AS Edad
@@ -546,6 +565,7 @@ ORDER BY totales desc;
 ```
 
 > Distribución de edades por inscripción.
+
 ```mysql
 CREATE VIEW InscripcionEdad AS 
 SELECT base.titular_anio_nacimiento, COUNT(*) as totales, YEAR(CURDATE())-round(avg(base.titular_anio_nacimiento)) AS Edad
