@@ -4,10 +4,10 @@
 
 La Base de Datos de Registros de la Propiedad Automotor está diseñada para almacenar y gestionar información sobre el registro de vehículos en el país. Esta base incluye detalles sobre los automotores, sus titulares, fechas de inscripción, y los registros seccionales donde fueron inscriptos.
 
-### **3.** Diagrama de base de datos
+### **2.** Diagrama de base de datos
 ![image](https://github.com/user-attachments/assets/89db22a3-a5ff-4a08-bce2-297e61937b60)
 
-### **4.** Instalacion
+### **3.** Instalacion
 
 - Clonación del repositorio hacia una carpeta cualquiera.
 
@@ -34,7 +34,7 @@ git clone https://github.com/eman3560/TrabajoBD24.git
 
     - [Por comandos SQL.](#carga-del-csv-al-entorno)
 
-### **5.** Sentencias
+### **4.** Sentencias
 
 ### Creación y uso de la base de datos.
 ```mysql
@@ -292,8 +292,7 @@ WHERE
     titular_pais_nacimiento_id = '';
 ```
 
-### Creación de tablas importantes.
-### Inserción de las columnas de la tabla base a sus tablas.
+### Creación de tablas importantes e inserción de las columnas de la tabla base a sus tablas.
 
 - Tabla provincia.
 ```mysql
