@@ -15,7 +15,7 @@ La Base de Datos de ![Registros de la Propiedad Automotor]()https://datos.gob.ar
 git clone https://github.com/eman3560/TrabajoBD24.git
 ```
 
-- Una vez clonado, importar dump sql.
+- Una vez clonado, importar dump sql (heidi).
 
 > Ir a Archivo > Ejecutar Archivo SQL.
 
@@ -433,8 +433,6 @@ REFERENCES automotor_modelo_descrip(cod_modelo_desc)
 ON DELETE RESTRICT
 ON UPDATE RESTRICT;
 ```
-
-DUPLICADO
 
 ### Provincia del registro donde se inscribio el auto.
 ```mysql
