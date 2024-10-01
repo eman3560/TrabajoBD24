@@ -21,7 +21,7 @@ git clone https://github.com/eman3560/TrabajoBD24.git
 
 ![image](Imagenes/dump1.png)
 
-> Buscar el dump.sql y abrirlo.
+> Buscar el dumpfinal.sql y abrirlo.
 
 ![image](Imagenes/dump2.png)
 
@@ -446,7 +446,7 @@ SET base.registro_seccional_provincia=provincia.prov_cod;
 ALTER TABLE base MODIFY base.registro_seccional_provincia TINYINT;
 
 ALTER TABLE base
-ADD CONSTRAINT fk_prov_secc
+ADD CONSTRAINT fk_reg_secc_prov
 FOREIGN KEY (registro_seccional_provincia)
 REFERENCES provincia(prov_cod)
 ON DELETE RESTRICT
@@ -476,8 +476,6 @@ UPDATE base
 SET titular_domicilio_provincia = 21
 WHERE titular_domicilio_provincia = 'SGO.DEL ESTERO';
 
-ALTER TABLE base MODIFY base.registro_seccional_provincia TINYINT;
-
 # Cambio el nombre del domicilio de la provincia por su id correspondiente.
 
 UPDATE base
@@ -485,9 +483,10 @@ JOIN provincia
 ON base.titular_domicilio_provincia = provincia.prov_nom
 SET base.titular_domicilio_provincia = provincia.prov_cod;
 
-
+# Cambio el tipo de dato varchar(255) a tinyint
 ALTER TABLE base MODIFY base.titular_domicilio_provincia TINYINT;
 
+# Pasa a ser foreign key de provincia
 ALTER TABLE base
 ADD CONSTRAINT fk_prov_mod
 FOREIGN KEY (titular_domicilio_provincia)
