@@ -460,8 +460,8 @@ JOIN provincia
 ON base.registro_seccional_provincia = provincia.prov_nom
 SET base.registro_seccional_provincia = provincia.prov_cod;
 
-> Error: hay 3 provincias escritas en forma diferente CIUDAD AUTONOMA DE BUENOS AIRES, SANTIAGO DEL ESTERO Y TIERRA DEL FUEGO
-- se corrige remplazando en forma manual por los codigos a los que corresponden
+# Error: hay 3 provincias escritas en forma diferente CIUDAD AUTONOMA DE BUENOS AIRES, SANTIAGO DEL ESTERO Y TIERRA DEL FUEGO
+# se corrige remplazando en forma manual por los codigos a los que corresponden
 
 # Correccion de error
 UPDATE base
@@ -477,6 +477,16 @@ SET titular_domicilio_provincia = 21
 WHERE titular_domicilio_provincia = 'SGO.DEL ESTERO';
 
 ALTER TABLE base MODIFY base.registro_seccional_provincia TINYINT;
+
+# Cambio el nombre del domicilio de la provincia por su id correspondiente.
+
+UPDATE base
+JOIN provincia
+ON base.titular_domicilio_provincia = provincia.prov_nom
+SET base.titular_domicilio_provincia = provincia.prov_cod;
+
+
+ALTER TABLE base MODIFY base.titular_domicilio_provincia TINYINT;
 
 ALTER TABLE base
 ADD CONSTRAINT fk_prov_mod
@@ -535,7 +545,7 @@ CREATE VIEW TotalMarcas AS
 SELECT automotor_marca_descrip.marca_desc, COUNT(*) AS Totales FROM automotor_marca_descrip, base
 WHERE base.automotor_marca_codigo = automotor_marca_descrip.cod_marca_desc
 GROUP BY automotor_marca_descrip.marca_desc
-ORDER BY Totales desc;
+ORDER BY Totales DESC;
 ```
 
 > Vista de marca y modelo más patentados durante Julio.
@@ -546,7 +556,7 @@ SELECT automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc,
 FROM base, automotor_modelo_descrip, automotor_marca_descrip
 WHERE base.automotor_marca_codigo = automotor_marca_descrip.cod_marca_desc AND base.automotor_modelo_codigo = automotor_modelo_descrip.cod_modelo_desc
 GROUP BY automotor_modelo_descrip.modelo_desc, automotor_marca_descrip.marca_desc
-ORDER BY Totales desc;
+ORDER BY Totales DESC;
 ```
 
 > Vista modelos de vehiculos y edad promedio de adquisición.
@@ -569,5 +579,5 @@ CREATE VIEW InscripcionEdad AS
 SELECT base.titular_anio_nacimiento, COUNT(*) AS Totales, YEAR(CURDATE())-round(avg(base.titular_anio_nacimiento)) AS Edad
 FROM base
 WHERE base.titular_tipo_persona != "Jurídica" AND base.automotor_uso_descripcion = "Privado" AND base.titular_anio_nacimiento < "2011"
-GROUP BY base.titular_anio_nacimiento asc;
+GROUP BY base.titular_anio_nacimiento ASC;
 ```
