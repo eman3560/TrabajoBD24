@@ -485,23 +485,8 @@ JOIN provincia
 ON base.registro_seccional_provincia = provincia.prov_nom
 SET base.registro_seccional_provincia = provincia.prov_cod;
 
-ALTER TABLE base MODIFY base.registro_seccional_provincia TINYINT;
-
-ALTER TABLE base
-ADD CONSTRAINT fk_prov_secc
-FOREIGN KEY (registro_seccional_provincia)
-REFERENCES provincia(prov_cod)
-ON DELETE RESTRICT
-ON UPDATE RESTRICT;
-```
-
-> Error: hay 3 provincias escritas en forma diferente CIUDADA AUTONOMA DE BUENOS AIRES, SANTIAGO DEL ESTERO Y TIERRA DEL FUEGO
+> Error: hay 3 provincias escritas en forma diferente CIUDAD AUTONOMA DE BUENOS AIRES, SANTIAGO DEL ESTERO Y TIERRA DEL FUEGO
 - se corrige poniendo el mismo código de provincia que la sección.
-```mysql
-UPDATE base
-JOIN provincia
-ON base.titular_domicilio_provincia = provincia.prov_nom
-SET base.titular_domicilio_provincia = provincia.prov_cod;
 
 # Correccion de error
 UPDATE base
@@ -516,11 +501,7 @@ UPDATE base
 SET titular_domicilio_provincia = 21
 WHERE titular_domicilio_provincia = 'SGO.DEL ESTERO';
 
-ALTER TABLE base MODIFY base.titular_domicilio_provincia TINYINT; // Error sql 1292, error corregido por lo anterior
-
-UPDATE base 
-SET base.titular_domicilio_provincia = base.registro_seccional_provincia
-WHERE base.titular_domicilio_provincia = 0;
+ALTER TABLE base MODIFY base.registro_seccional_provincia TINYINT;
 
 ALTER TABLE base
 ADD CONSTRAINT fk_prov_mod
@@ -530,7 +511,7 @@ ON DELETE RESTRICT
 ON UPDATE RESTRICT;
 ```
 
-### Editando el resto de los campos para disminur el tamaño de la Base de Datos.
+### Editando el resto de los campos para dejarlos acordes al tipo de dato que almacenan.
 
 ```mysql
 ALTER TABLE base MODIFY base.tramite_tipo VARCHAR(60);
