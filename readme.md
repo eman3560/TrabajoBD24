@@ -38,7 +38,7 @@ USE pat24;
 ```
 
 ### Creación de la tabla principal de la base de datos.
-### Se cargan todos los campos como varchar(255). Posteriormente se modificarán para reflejar el verdadero tipo de dato que contiene.
+- Se cargan todos los campos como varchar(255). Posteriormente se modificarán para reflejar el verdadero tipo de dato que contiene.
 ```mysql
 CREATE TABLE base(
     base_cod                        	MEDIUMINT PRIMARY KEY AUTO_INCREMENT,
