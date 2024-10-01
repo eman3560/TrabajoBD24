@@ -64,6 +64,7 @@ USE pat24;
 ```
 
 ### Creación de la tabla principal de la base de datos.
+### Se cargan todos los campos como varchar(255). Posteriormente se modificarán para reflejar el verdadero tipo de dato que contiene.
 ```mysql
 CREATE TABLE base(
     base_cod                        	MEDIUMINT PRIMARY KEY AUTO_INCREMENT,
@@ -112,7 +113,7 @@ titular_pais_nacimiento_id);
 ```
 
 ### Normalización de los datos.
-- Columnas con cadenas de texto vacias pasandolas a NULL.
+- Existen campos con cadenas de texto vacias las cuales son convertidas a datos tipo NULL.
 ```mysql
 UPDATE base 
 SET 
@@ -315,7 +316,7 @@ WHERE
 
 ### Creación de tablas importantes e inserción de las columnas de la tabla base a sus tablas.
 
-- Tabla provincia.
+- Tabla con las provincias.
 ```mysql
 CREATE TABLE provincia(
 prov_cod              TINYINT PRIMARY KEY AUTO_INCREMENT,
@@ -326,7 +327,7 @@ INSERT INTO provincia(prov_nom)
 SELECT DISTINCT registro_seccional_provincia
 FROM base;
 ```
-- Tabla tipo de automotor .
+- Tabla tipo de automotor (automovil, camion, acoplado, etc). La base contiene una codificacion alfanumerica como identificador para cada tipo por lo que decidimos crear la tabla considerando dicho código y la descripcion de la misma.-
 ```mysql
 CREATE TABLE automotor_tipo_descrip(
 cod_tipo_desc        TINYINT PRIMARY KEY AUTO_INCREMENT,
@@ -339,7 +340,7 @@ SELECT distinct base.automotor_tipo_codigo, base.automotor_tipo_descripcion
 FROM base;
 ```
 
-- Tabla marca de automotor.
+- Tabla marca de automotor (Ford, Renault, Scania, etc). La base contiene una codificacion alfanumerica como identificador para cada marca por lo que decidimos crear la tabla considerando dicho código y la descripcion de la misma.-
 ```mysql
 CREATE TABLE automotor_marca_descrip(
 cod_marca_desc      SMALLINT PRIMARY KEY AUTO_INCREMENT,
@@ -352,7 +353,7 @@ SELECT DISTINCT base.automotor_marca_codigo, base.automotor_marca_descripcion
 FROM base;
 ```
 
-- Tabla modelo de automotor.
+- Tabla modelo de automotor (Mondeo, Ka, Etios, etc). La base contiene una codificacion alfanumerica como identificador para cada modelo por lo que decidimos crear la tabla considerando dicho código y la descripcion de la misma.-
 ```mysql
 CREATE TABLE automotor_modelo_descrip(
 cod_modelo_desc     SMALLINT PRIMARY KEY AUTO_INCREMENT,
@@ -365,7 +366,7 @@ SELECT DISTINCT base.automotor_modelo_codigo, base.automotor_modelo_descripcion
 FROM base;
 ```
 
-- Género del titular.
+- Género del titular (Masculino, Femenino, No aplica)
 ```mysql
 CREATE TABLE genero(
 cod_titular_gen     TINYINT PRIMARY KEY AUTO_INCREMENT,
@@ -387,7 +388,7 @@ JOIN genero
 ON base.titular_genero = genero.titular_gen
 SET base.titular_genero = genero.cod_titular_gen;
 
-# El campo titular_genero se importo como varchar(255) pero ahora que solo tiene un número no necesita ser tan grande. Lo hago tinyint porque
+# El campo titular_genero se importo como varchar(255) pero ahora que solo tiene un número como clave foranea no necesita ser tan grande. Lo convertimos a tipo tinyint porque
 # ese tipo de dato es la clave primaria de la tabla y es necesario que sean iguales para hacer las reglas de integridad.
 
 ALTER TABLE base MODIFY titular_genero TINYINT;
@@ -486,7 +487,7 @@ ON base.registro_seccional_provincia = provincia.prov_nom
 SET base.registro_seccional_provincia = provincia.prov_cod;
 
 > Error: hay 3 provincias escritas en forma diferente CIUDAD AUTONOMA DE BUENOS AIRES, SANTIAGO DEL ESTERO Y TIERRA DEL FUEGO
-- se corrige poniendo el mismo código de provincia que la sección.
+- se corrige remplazando en forma manual por los codigos a los que corresponden
 
 # Correccion de error
 UPDATE base
