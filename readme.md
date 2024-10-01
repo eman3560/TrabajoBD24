@@ -15,29 +15,7 @@ La Base de Datos de Registros de la Propiedad Automotor está diseñada para alm
 git clone https://github.com/eman3560/TrabajoBD24.git
 ```
 
-- Una vez clonado, [crear la base](#creación-y-uso-de-la-base-de-datos) y [crear la tabla.](#creación-de-la-tabla-principal-de-la-base-de-datos) 
-
-- Luego se elegirá una forma de importar el .csv.
-
-    - Por UI.
-
-    > Una vez creada la base de datos y la tabla principal, la cual contiene toda la fila 1 del .csv, se importa como en la siguiente imagen.
-
-    ![image](Imagenes/importacion.png)
-    
-    En la importacion, se debe:
-
-    - Ignorar la primera fila.
-    - Ignorar la primera columna.
-    - Y controlar los campos de caracteres de control.
-
-    ![image](Imagenes/importacion2.png)
-
-    - [Por comandos SQL.](#carga-del-csv-al-entorno)
-
-<hr>
-
-- Importar dump sql.
+- Una vez clonado, importar dump sql.
 
 > Ir a Archivo > Ejecutar Archivo SQL.
 
@@ -50,10 +28,6 @@ git clone https://github.com/eman3560/TrabajoBD24.git
 > Una vez abierto confirmar la auto detección de codificación.
 
 ![image](Imagenes/dump3.png)
-
-
-
-
 
 ### **4.** Sentencias
 
