@@ -352,7 +352,7 @@ SELECT DISTINCT base.titular_genero
 FROM base;
 ```
 
-> Generación de referencias en la tabla principal a las tablas relacionadas.
+- Generación de referencias en la tabla principal a las tablas relacionadas.
 ```mysql
 
 # Remplazo a descripción de los géneros en la tabla base por la referencia a la tabla géneros.
