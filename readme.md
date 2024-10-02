@@ -2,7 +2,7 @@
 
 ### **1.** Introducción
 
-La Base de Datos de ![Registros de la Propiedad Automotor](https://datos.gob.ar/dataset/justicia-inscripciones-iniciales-autos) está diseñada para almacenar y gestionar información sobre el registro de vehículos en el país. Esta base incluye detalles sobre los automotores, sus titulares, fechas de inscripción, y los registros seccionales donde fueron inscriptos.
+La Base de Datos de [Registros de la Propiedad Automotor](https://datos.gob.ar/dataset/justicia-inscripciones-iniciales-autos) está diseñada para almacenar y gestionar información sobre el registro de vehículos en el país. Esta base incluye detalles sobre los automotores, sus titulares, fechas de inscripción, y los registros seccionales donde fueron inscriptos.
 
 ### **2.** Diagrama de base de datos
 ![image](https://github.com/user-attachments/assets/89db22a3-a5ff-4a08-bce2-297e61937b60)
